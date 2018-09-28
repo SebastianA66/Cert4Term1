@@ -3,42 +3,45 @@ using System.Collections.Generic;
 using UnityEngine;
 using TowerDefense.Towers.Placement;
 
-
-public class TowerPlacement : MonoBehaviour
+namespace Palewyn
 {
 
-    public LayerMask hitLayers;
-    
+    public class TowerPlacement : MonoBehaviour
+    {
 
-    private void OnDrawGizmos()
-    {
-        Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(camRay.origin, camRay.origin + camRay.direction * 1000f);
-    }
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        if(Input.GetMouseButtonDown(0))
+        public LayerMask hitLayers;
+
+
+        private void OnDrawGizmos()
         {
-            //Perform raycaast
             Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(camRay, out hit, 1000f, hitLayers))
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(camRay.origin, camRay.origin + camRay.direction * 1000f);
+        }
+        // Update is called once per frame
+        void FixedUpdate()
+        {
+            if (Input.GetMouseButtonDown(0))
             {
-                //Check if hitting grid
-                IPlacementArea placement = hit.collider.GetComponent<IPlacementArea>();
-                //Get grid position
-                if (placement != null)
+                //Perform raycaast
+                Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(camRay, out hit, 1000f, hitLayers))
                 {
-                    //snap position tower to grid element
-                    transform.position = placement.Snap(hit.point, new Core.Utilities.IntVector2(1, 1));
+                    //Check if hitting grid
+                    IPlacementArea placement = hit.collider.GetComponent<IPlacementArea>();
+                    //Get grid position
+                    if (placement != null)
+                    {
+                        //snap position tower to grid element
+                        transform.position = placement.Snap(hit.point, new Core.Utilities.IntVector2(1, 1));
+                    }
                 }
             }
+
+
+
+
         }
-        
-
-
-
     }
 }
